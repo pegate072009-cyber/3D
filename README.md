@@ -35,3 +35,11 @@ On Android, you can upload the folder to a static hosting provider (for example 
 ## Notes / current limitations
 
 This is a functional starter editor, not a full Unity/Unreal replacement. The timeline is currently a UI placeholder; there is no animation authoring, physics simulation, terrain sculpting, multiplayer, asset marketplace, or runtime game packaging yet. Imported external model assets are included in GLB export, but the `.forge3d` project file currently stores editable primitive/object transforms and basic material properties rather than embedding imported model binaries. Imported image textures are also not embedded in project JSON.
+
+
+## Version 1.1 updates
+- Added 6 additional primitives: Torus Knot, Capsule, Ring, Circle, Tetrahedron, and Icosahedron.
+- Added quick resize buttons (Smaller, Reset, Bigger).
+- Added a uniform scale slider in the Inspector.
+- Kept independent X/Y/Z scale fields and scale gizmo mode.
+- Expanded primitives are saved and restored in Forge3D project files.

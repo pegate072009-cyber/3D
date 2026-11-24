@@ -34,12 +34,24 @@
         <button class="tool-card" data-create="plane"><span class="tool-icon">▱</span><b>Plane</b></button>
         <button class="tool-card" data-create="cone"><span class="tool-icon">▲</span><b>Cone</b></button>
         <button class="tool-card" data-create="torus"><span class="tool-icon">◎</span><b>Torus</b></button>
+        <button class="tool-card" data-create="torusKnot"><span class="tool-icon">❋</span><b>Knot</b></button>
+        <button class="tool-card" data-create="capsule"><span class="tool-icon">▯</span><b>Capsule</b></button>
+        <button class="tool-card" data-create="ring"><span class="tool-icon">◉</span><b>Ring</b></button>
+        <button class="tool-card" data-create="circle"><span class="tool-icon">○</span><b>Circle</b></button>
+        <button class="tool-card" data-create="tetrahedron"><span class="tool-icon">△</span><b>Tetra</b></button>
+        <button class="tool-card" data-create="icosahedron"><span class="tool-icon">⬡</span><b>Icosa</b></button>
       </div>
       <div class="section-title">TRANSFORM</div>
       <div class="tool-row">
         <button class="mode-btn active" data-mode="translate" title="Move (W)">↔ <small>Move</small></button>
         <button class="mode-btn" data-mode="rotate" title="Rotate (E)">⟳ <small>Rotate</small></button>
         <button class="mode-btn" data-mode="scale" title="Scale (R)">⤢ <small>Scale</small></button>
+      </div>
+      <div class="section-title">QUICK RESIZE</div>
+      <div class="resize-tools">
+        <button class="mode-btn" id="scaleDownBtn" title="Make selected object smaller">− <small>Smaller</small></button>
+        <button class="mode-btn" id="scaleResetBtn" title="Reset selected object size">1:1 <small>Reset</small></button>
+        <button class="mode-btn" id="scaleUpBtn" title="Make selected object bigger">＋ <small>Bigger</small></button>
       </div>
       <div class="section-title">SCENE TOOLS</div>
       <button class="wide-tool" id="addLightBtn"><span>☼</span> Add point light</button>
@@ -84,7 +96,7 @@
           <div class="section-title">TRANSFORM</div>
           <div class="vector-group"><label>Position</label><div class="vector-inputs"><input id="posX" type="number" step="0.1"><input id="posY" type="number" step="0.1"><input id="posZ" type="number" step="0.1"></div></div>
           <div class="vector-group"><label>Rotation (degrees)</label><div class="vector-inputs"><input id="rotX" type="number" step="5"><input id="rotY" type="number" step="5"><input id="rotZ" type="number" step="5"></div></div>
-          <div class="vector-group"><label>Scale</label><div class="vector-inputs"><input id="scaleX" type="number" step="0.1"><input id="scaleY" type="number" step="0.1"><input id="scaleZ" type="number" step="0.1"></div></div>
+          <div class="vector-group"><label>Scale (X / Y / Z)</label><div class="vector-inputs"><input id="scaleX" type="number" min="0.01" step="0.1"><input id="scaleY" type="number" min="0.01" step="0.1"><input id="scaleZ" type="number" min="0.01" step="0.1"></div><label class="uniform-scale-label">Uniform size <output id="uniformScaleValue">1.00×</output></label><input id="uniformScale" class="uniform-scale" type="range" min="0.1" max="5" step="0.05" value="1"></div>
           <div class="section-title">MATERIAL</div>
           <label class="field-label">Base color<div class="color-field"><input id="matColor" type="color" value="#6c7cff"><span id="colorValue">#6c7cff</span></div></label>
           <label class="field-label">Roughness <input id="roughness" type="range" min="0" max="1" step="0.01" value="0.55"></label>
