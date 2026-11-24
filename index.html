@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#10131b" />
+  <title>Forge3D — Browser Game Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Forge3D home"><span class="brand-mark">F</span><span>FORGE<span class="brand-muted">3D</span></span></a>
+    <div class="project-name"><span class="live-dot"></span><input id="projectName" value="Untitled Project" aria-label="Project name" /></div>
+    <div class="top-actions">
+      <button class="btn ghost" id="newProjectBtn">New</button>
+      <button class="btn ghost" id="openProjectBtn">Open</button>
+      <button class="btn ghost" id="saveProjectBtn">Save project</button>
+      <button class="btn primary" id="exportGlbBtn">Export GLB ↓</button>
+      <input type="file" id="projectFile" accept=".json,.forge3d,application/json" hidden />
+      <input type="file" id="assetFile" accept=".glb,.gltf,.obj,.stl,.fbx,.png,.jpg,.jpeg,.webp" multiple hidden />
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="left-panel panel" id="left-panel">
+      <div class="panel-heading"><span>CREATE</span><span class="muted">TOOLS</span></div>
+      <div class="tool-grid">
+        <button class="tool-card" data-create="box"><span class="tool-icon">▧</span><b>Cube</b></button>
+        <button class="tool-card" data-create="sphere"><span class="tool-icon">●</span><b>Sphere</b></button>
+        <button class="tool-card" data-create="cylinder"><span class="tool-icon">⬭</span><b>Cylinder</b></button>
+        <button class="tool-card" data-create="plane"><span class="tool-icon">▱</span><b>Plane</b></button>
+        <button class="tool-card" data-create="cone"><span class="tool-icon">▲</span><b>Cone</b></button>
+        <button class="tool-card" data-create="torus"><span class="tool-icon">◎</span><b>Torus</b></button>
+      </div>
+      <div class="section-title">TRANSFORM</div>
+      <div class="tool-row">
+        <button class="mode-btn active" data-mode="translate" title="Move (W)">↔ <small>Move</small></button>
+        <button class="mode-btn" data-mode="rotate" title="Rotate (E)">⟳ <small>Rotate</small></button>
+        <button class="mode-btn" data-mode="scale" title="Scale (R)">⤢ <small>Scale</small></button>
+      </div>
+      <div class="section-title">SCENE TOOLS</div>
+      <button class="wide-tool" id="addLightBtn"><span>☼</span> Add point light</button>
+      <button class="wide-tool" id="addCameraBtn"><span>◉</span> Add camera</button>
+      <button class="wide-tool" id="importAssetBtn"><span>＋</span> Import 3D / image asset</button>
+      <button class="wide-tool" id="scriptBtn"><span>⌘</span> Open script editor</button>
+      <div class="section-title">VIEW</div>
+      <label class="toggle-row"><span>Grid helper</span><input type="checkbox" id="gridToggle" checked /></label>
+      <label class="toggle-row"><span>Axes helper</span><input type="checkbox" id="axesToggle" /></label>
+      <label class="toggle-row"><span>Shadows</span><input type="checkbox" id="shadowToggle" checked /></label>
+      <div class="left-footer"><span class="status-led"></span> WebGL workspace ready</div>
+    </aside>
+
+    <section class="center-panel">
+      <div class="viewport-toolbar">
+        <div class="view-tabs"><button class="view-tab active">Scene</button><button class="view-tab" id="gameViewBtn">Game preview</button></div>
+        <div class="viewport-actions"><button class="icon-btn" id="focusBtn" title="Focus selected">◎</button><button class="icon-btn" id="resetViewBtn" title="Reset view">⌂</button><button class="icon-btn" id="fullscreenBtn" title="Fullscreen">⛶</button></div>
+      </div>
+      <div id="viewport" class="viewport">
+        <div class="viewport-hint">DRAG to orbit <span>•</span> RIGHT-DRAG to pan <span>•</span> SCROLL to zoom</div>
+        <div class="axis-label axis-x">X</div><div class="axis-label axis-y">Y</div><div class="axis-label axis-z">Z</div>
+        <div class="viewport-empty" id="emptyHint"><div class="empty-cube">◇</div><b>Your 3D world starts here</b><span>Add an object from the Create panel.</span><button class="btn primary" id="addFirstCube">＋ Add your first cube</button></div>
+        <div class="play-overlay" id="playOverlay" hidden><span>▶ PLAY MODE</span><button class="btn" id="stopPlayBtn">Stop</button></div>
+      </div>
+      <div class="timeline-bar"><div class="timeline-label">TIMELINE</div><div class="timeline-track"><span class="timeline-playhead"></span><span class="timeline-tick"></span><span class="timeline-tick"></span><span class="timeline-tick"></span><span class="timeline-tick"></span><span class="timeline-tick"></span><span class="timeline-tick"></span></div><span class="timeline-time">00:00 / 00:10</span></div>
+      <div class="bottom-toolbar"><span id="selectionStatus">No object selected</span><span class="muted">Perspective · Real-time preview</span><span class="shortcuts">W Move&nbsp;&nbsp; E Rotate&nbsp;&nbsp; R Scale&nbsp;&nbsp; Delete Remove</span></div>
+    </section>
+
+    <aside class="right-panel panel">
+      <div class="right-tabs"><button class="right-tab active" data-tab="hierarchy">Hierarchy</button><button class="right-tab" data-tab="inspector">Inspector</button></div>
+      <section class="tab-content" id="hierarchyTab">
+        <div class="panel-heading"><span>SCENE OBJECTS</span><button class="mini-btn" id="hierarchyAddBtn">＋</button></div>
+        <div class="scene-root">▾ <b>Scene</b></div>
+        <ul id="objectList" class="object-list"><li class="empty-list">No objects yet</li></ul>
+        <div class="hierarchy-footer"><span id="objectCount">0 objects</span><button class="text-btn" id="deleteSelectedBtn">Delete selected</button></div>
+      </section>
+      <section class="tab-content" id="inspectorTab" hidden>
+        <div class="panel-heading"><span>OBJECT PROPERTIES</span><span class="muted" id="inspectorType">—</span></div>
+        <div id="inspectorEmpty" class="inspector-empty">Select an object in the scene or hierarchy to edit its properties.</div>
+        <div id="inspectorFields" hidden>
+          <label class="field-label">Name<input id="objName" type="text" /></label>
+          <div class="section-title">TRANSFORM</div>
+          <div class="vector-group"><label>Position</label><div class="vector-inputs"><input id="posX" type="number" step="0.1"><input id="posY" type="number" step="0.1"><input id="posZ" type="number" step="0.1"></div></div>
+          <div class="vector-group"><label>Rotation (degrees)</label><div class="vector-inputs"><input id="rotX" type="number" step="5"><input id="rotY" type="number" step="5"><input id="rotZ" type="number" step="5"></div></div>
+          <div class="vector-group"><label>Scale</label><div class="vector-inputs"><input id="scaleX" type="number" step="0.1"><input id="scaleY" type="number" step="0.1"><input id="scaleZ" type="number" step="0.1"></div></div>
+          <div class="section-title">MATERIAL</div>
+          <label class="field-label">Base color<div class="color-field"><input id="matColor" type="color" value="#6c7cff"><span id="colorValue">#6c7cff</span></div></label>
+          <label class="field-label">Roughness <input id="roughness" type="range" min="0" max="1" step="0.01" value="0.55"></label>
+          <label class="field-label">Metalness <input id="metalness" type="range" min="0" max="1" step="0.01" value="0.1"></label>
+          <label class="toggle-row"><span>Wireframe</span><input id="wireframe" type="checkbox"></label>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <div class="mobile-dock"><button data-mobile-tab="create" class="active">＋<small>Create</small></button><button data-mobile-tab="scene">◇<small>Scene</small></button><button data-mobile-tab="inspect">☷<small>Inspect</small></button><button id="mobilePlayBtn">▶<small>Play</small></button></div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <dialog id="scriptDialog" class="modal"><form method="dialog" class="modal-card"><div class="modal-head"><b>JavaScript Script Editor</b><button class="icon-btn">✕</button></div><p class="muted">Write and download game logic. Scripts are saved with your project but are not automatically executed.</p><textarea id="scriptSource" spellcheck="false" placeholder="// Your game logic goes here\n// Example: console.log('Hello 3D world!');"></textarea><div class="modal-actions"><button type="button" class="btn ghost" id="downloadScriptBtn">Download .js</button><button class="btn primary">Done</button></div></form></dialog>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
